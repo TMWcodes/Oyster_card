@@ -1,10 +1,12 @@
 
 class Oystercard
-attr_accessor :balance, :journey
+attr_accessor :balance, :in_journey
+MINIMUM_LIMIT = 1
+CARD_LIMIT = 100
 
-CARD_LIMIT = 90
   def initialize
     @balance = 0
+    @in_journey = false
   end
 
   def top_up(amount)
@@ -17,15 +19,15 @@ CARD_LIMIT = 90
   end
 
   def in_journey?
-    @journey
+    @in_journey
   end
 
   def touch_in
-    @journey = true
-    #fail "not enough money" if balance < 1
+    fail "not enough money" if @balance < MINIMUM_LIMIT
+    @in_journey = true
   end
 
   def touch_out
-    @journey = false
+    @in_journey = false
   end
 end

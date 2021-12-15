@@ -20,24 +20,27 @@ describe Oystercard do
     expect { subject.deduct(1) }.to(change{ subject.balance }.by -1)
   end
 
-  it 'not in a journey' do
+  it 'in a journey' do
   expect(subject).not_to be_in_journey
   end
 
-  it 'touch in if not in journey' do
+  it 'touch in ' do
+    subject.top_up(10)
     subject.touch_in
     expect(subject).to be_in_journey
   end
-  it 'touch out if in journey' do
+
+  it 'requires a minimum payment to touch in' do
+    balance = subject.balance
+    subject.deduct(balance)
+    expect{subject.touch_in}.to raise_error("not enough money")
+  end
+
+  it 'touch out ' do
+    subject.top_up(10)
     subject.touch_in
     subject.touch_out
-    expect(subject).not_to be_in_journey
+    expect(subject.in_journey).to eq(false)
   end
-
-  it 'requires a minimum payment' do
-    expect{subject}.to raise_error("not enough money")
-  end
-
-
 
 end
