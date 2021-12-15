@@ -8,8 +8,36 @@ describe Oystercard do
     subject.top_up(10)
     expect(subject.balance).to eq(10)
   end
-  it "is limited to #{Oystercard::DEFAULT_LIMIT}" do
-  subject.top_up(Oystercard::DEFAULT_LIMIT)
-  expect { subject.top_up(0.01) }.to raise_error "Sorry, limit is #{Oystercard::DEFAULT_LIMIT}"
+  it "is limited to #{Oystercard::CARD_LIMIT}" do
+  subject.top_up(Oystercard::CARD_LIMIT)
+  expect { subject.top_up(0.01) }.to raise_error "Sorry, limit is #{Oystercard::CARD_LIMIT}"
   end
+
+  it { is_expected.to respond_to(:deduct)}
+
+  it 'deducts money from the card balance' do
+    subject.top_up(10)
+    expect { subject.deduct(1) }.to(change{ subject.balance }.by -1)
+  end
+
+  it 'not in a journey' do
+  expect(subject).not_to be_in_journey
+  end
+
+  it 'touch in if not in journey' do
+    subject.touch_in
+    expect(subject).to be_in_journey
+  end
+  it 'touch out if in journey' do
+    subject.touch_in
+    subject.touch_out
+    expect(subject).not_to be_in_journey
+  end
+
+  it 'requires a minimum payment' do
+    expect{subject}.to raise_error("not enough money")
+  end
+
+
+
 end
