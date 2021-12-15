@@ -2,7 +2,7 @@
 class Oystercard
 attr_accessor :balance, :in_journey
 MINIMUM_LIMIT = 1
-CARD_LIMIT = 100
+CARD_LIMIT = 90
 
   def initialize
     @balance = 0
@@ -29,5 +29,9 @@ CARD_LIMIT = 100
 
   def touch_out
     @in_journey = false
+    deduct(MINIMUM_LIMIT)
+
   end
+
+
 end

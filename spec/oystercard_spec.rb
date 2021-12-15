@@ -43,4 +43,9 @@ describe Oystercard do
     expect(subject.in_journey).to eq(false)
   end
 
+  it 'deduct fee from balance' do
+  minimum_limit = Oystercard::MINIMUM_LIMIT
+  expect{ subject.touch_out }.to change{ subject.balance }.by(-minimum_limit)
+  end
+
 end
